@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Completar Frases</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== INICIO ===== -->
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="logo" aria-hidden="true">✏️📖🧩</div>
+    <h1>Completar Frases</h1>
+    <p class="lead">Arrastra las palabras que faltan hasta su lugar en la oración.</p>
+    <ol class="howto">
+      <li><b>Arrastra</b> cada palabra a un espacio en blanco, o haz <b>clic</b> en la palabra y luego en el espacio.</li>
+      <li>Al colocar todas las palabras, la actividad se <b>comprueba automáticamente</b>.</li>
+      <li>Después de cada oración pasarás automáticamente a la siguiente, incluso si cometiste errores.</li>
+    </ol>
+    <label class="pick">Actividad <select id="homeSelect"></select></label>
+    <div class="btns">
+      <button id="btnConfig" class="btn big blue">⚙ CONFIGURAR ACTIVIDAD</button>
+      <button id="btnStart" class="btn big green">▶ COMENZAR JUEGO</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== JUEGO ===== -->
+<section id="game" class="screen">
+  <header class="gbar">
+    <h2 id="gTitle"></h2>
+    <div class="stats">
+      <span class="chipi">📝 <b id="sS">1/1</b></span>
+      <span class="chipi">✅ <b id="sOk">0</b></span>
+      <span class="chipi">❌ <b id="sErr">0</b></span>
+      <span class="chipi">⏱ <b id="sTime">0:00</b></span>
+    </div>
+    <div class="gbtns">
+      <button id="gSound" class="btn small ghost" aria-label="Sonido">🔊</button>
+      <button id="gRestart" class="btn small amber">↻ REINICIAR</button>
+      <button id="gExit" class="btn small red">SALIR</button>
+    </div>
+  </header>
+  <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div id="pBar"></div><span id="pTxt">0%</span></div>
+  <main id="stage" class="stage off">
+    <div id="sentence" class="sentence" aria-label="Oración"></div>
+    <p id="msg" class="msg" aria-live="polite">&nbsp;</p>
+    <div id="bank" class="bank" aria-label="Banco de palabras"></div>
+  </main>
+</section>
+
+<!-- ===== CONFIGURACIÓN ===== -->
+<section id="admin" class="screen">
+  <div class="panel">
+    <header class="bar"><h2>⚙ Configurar actividad</h2><button id="aBack" class="btn small ghost">← Volver</button></header>
+    <div class="card-box">
+      <h3>Actividades guardadas</h3>
+      <div class="row">
+        <select id="aSaved" aria-label="Actividades guardadas"></select>
+        <button id="aLoad" class="btn small blue">Cargar / editar</button>
+        <button id="aDelete" class="btn small red">Eliminar</button>
+        <button id="aReset" class="btn small ghost">Reiniciar configuración</button>
+      </div>
+    </div>
+    <div class="card-box">
+      <h3>Configuración del juego</h3>
+      <div class="grid">
+        <label>Título de la actividad<input id="aTitle" maxlength="60"></label>
+        <label>Tiempo límite en segundos (0 = sin límite)<input id="aTime" type="number" min="0" max="7200"></label>
+        <label class="check"><input id="aShuffle" type="checkbox"> Mezclar el orden de las oraciones</label>
+        <label class="check"><input id="aSound" type="checkbox"> Sonidos activados</label>
+      </div>
+    </div>
+    <div class="card-box">
+      <h3>Oraciones <span id="aCount" class="tag"></span></h3>
+      <p class="hint">Escribe la palabra o frase que falta <b>entre corchetes</b>. Ejemplo: <code>El [sol] sale por la [mañana]</code>. Las distractoras son palabras extra que no pertenecen a ningún espacio (separadas por comas).</p>
+      <div id="aList"></div>
+      <button id="aAdd" class="btn small blue">+ Agregar oración</button>
+    </div>
+    <div class="btns">
+      <button id="aSave" class="btn big green">💾 GUARDAR ACTIVIDAD</button>
+      <button id="aPlay" class="btn big violet">▶ GUARDAR Y JUGAR</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OVERLAYS ===== -->
+<div id="countdown" class="overlay"><div id="cdNum"></div></div>
+
+<div id="cModal" class="overlay modal" role="dialog" aria-modal="true" aria-labelledby="cText">
+  <div class="dialog"><div id="cIcon" class="logo" aria-hidden="true">❓</div><p id="cText"></p>
+    <div class="btns"><button id="cNo" class="btn big green">CANCELAR</button><button id="cYes" class="btn big red">SÍ</button></div></div>
+</div>
+
+<div id="rModal" class="overlay modal" role="dialog" aria-modal="true" aria-labelledby="rTitle">
+  <div class="dialog">
+    <div id="rIcon" class="logo" aria-hidden="true">🏆</div>
+    <h2 id="rTitle"></h2>
+    <p id="rMsg" class="rmsg"></p>
+    <div class="results">
+      <div><b id="rScore">0</b><span>Puntuación</span></div>
+      <div><b id="rOk">0</b><span>Oraciones correctas</span></div>
+      <div><b id="rErr">0</b><span>Errores</span></div>
+      <div><b id="rTime">0:00</b><span>Tiempo</span></div>
+      <div><b id="rPerf">0%</b><span>Rendimiento</span></div>
+    </div>
+    <div id="rDetails" class="result-details"></div>
+    <div class="btns">
+      <button id="rAgain" class="btn big green">↻ VOLVER A JUGAR</button>
+      <button id="rExit" class="btn big red">SALIR</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
